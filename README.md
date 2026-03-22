@@ -1,7 +1,7 @@
 # WallCraft 🎨
 
 ## 📥 Download latest APK
-<a href="https://raw.githubusercontent.com/rishabh11336/Flutter-Wall-paper-App/main/apk/app-release.apk">
+<a href="https://raw.githubusercontent.com/rishabh11336/Flutter-Wall-paper-App/main/apk/WallCraft.apk">
   <img src="https://img.shields.io/badge/Download-APK%20for%20Android-green?style=for-the-badge&logo=android" alt="Download APK for Android" />
 </a>
 
