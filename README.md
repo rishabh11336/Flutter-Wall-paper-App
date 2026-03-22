@@ -1,5 +1,10 @@
 # WallCraft 🎨
 
+## 📥 Download latest APK
+<a href="https://raw.githubusercontent.com/rishabh11336/Flutter-Wall-paper-App/main/apk/app-release.apk">
+  <img src="https://img.shields.io/badge/Download-APK%20for%20Android-green?style=for-the-badge&logo=android" alt="Download APK for Android" />
+</a>
+
 An open-source, beautifully modern wallpaper application built entirely with **Flutter** (Material 3). Designed with performance, edge-to-edge native experiences, and simplicity in mind.
 
 ## ✨ Features
