@@ -1,184 +1,54 @@
-# WallCraft – Flutter Wallpaper App (Phase 1)
+# WallCraft 🎨
 
-A cross-platform (iOS & Android) wallpaper browsing app that fetches wallpapers from a public GitHub repository and lets users preview them in full-screen.
+An open-source, beautifully modern wallpaper application built entirely with **Flutter** (Material 3). Designed with performance, edge-to-edge native experiences, and simplicity in mind.
 
-## Screenshots
+## ✨ Features
+* **Zero-Server Backend**: Dynamically hits the GitHub APIs! Wallpapers are added instantly just by dragging and dropping `.jpg`, `.png`, or `.webp` files into your GitHub repository! No manual `manifest.json` databases to manage.
+* **Native Wallpaper Application**: Instantly apply any photo seamlessly to your device's Home Screen, Lock Screen, or both.
+* **Liquid Smooth UI**: Unobtrusive frosted-glass App Bars, staggered infinite-scrolling grids, and skeleton "Shimmer" loaders using an immersive edge-to-edge aesthetic.
+* **Auto-Tagging & Formatting**: Wallpapers hosted on GitHub have their filenames automatically parsed, spaced, capitalized, and organized into dynamic search tags.
+* **Save to Gallery**: One-click download directly into the native Photos folder.
 
-Phase 1 delivers:
-- 🏠 **Home screen** with category tab bar and a 2-column wallpaper grid
-- ✨ **Shimmer loading skeletons** while images load
-- 🖼️ **Preview screen** with full-screen image, Hero animation, and gradient overlay
-- 🎨 **Light & Dark mode** support with Material 3
+## 🛠 Tech Stack
+- **Framework**: [Flutter 3.x](https://flutter.dev/) (Android, iOS)
+- **State Management**: [Riverpod](https://riverpod.dev/) (`hooks_riverpod`, `riverpod_annotation`)
+- **Routing**: [GoRouter](https://pub.dev/packages/go_router)
+- **Networking**: [Dio](https://pub.dev/packages/dio)
+- **Local Storage**: [Hive](https://pub.dev/packages/hive_flutter)
+- **Native Bridges**: `flutter_wallpaper_manager`, `image_gallery_saver`
 
----
+## 🚀 Getting Started
 
-## Tech Stack
+### 1. Prerequisites
+- **Flutter SDK** (`>=3.4.0`)
+- **Android Studio** or **Xcode** for simulation.
 
-| Concern           | Package                          |
-| ----------------- | -------------------------------- |
-| State management  | `flutter_riverpod`               |
-| Navigation        | `go_router`                      |
-| HTTP client       | `dio`                            |
-| Image loading     | `cached_network_image`           |
-| Loading skeletons | `shimmer`                        |
-| Models            | `freezed` + `json_serializable`  |
-| Typography        | `google_fonts` (Outfit + Inter)  |
-
----
-
-## Getting Started
-
-### Prerequisites
-
-- Flutter **3.19+** (latest stable recommended)
-- Dart **3.2+**
-- iOS: Xcode 15+ and CocoaPods
-- Android: Android Studio with Gradle 8+
-
-### Setup
-
+### 2. Installation
 ```bash
-# 1. Clone the repo
-git clone <your-repo-url>
-cd wallpaper_app
-
-# 2. Install dependencies
+git clone https://github.com/rishabh11336/Flutter-Wall-paper-App.git
+cd Flutter-Wall-paper-App
 flutter pub get
-
-# 3. Generate freezed/json_serializable code
-flutter pub run build_runner build --delete-conflicting-outputs
-
-# 4. Run the app
-flutter run
 ```
 
-> **Note:** If `flutter` is not in your PATH, use the full path to your Flutter binary (e.g. `~/Developer/flutter/bin/flutter`).
-
----
-
-## Pointing to Your GitHub Image Repo
-
-The app fetches a `manifest.json` file from a public GitHub repository.
-
-### 1. Create a manifest
-
-In your GitHub repo (e.g. [rishabh11336/Wallpaper-Images](https://github.com/rishabh11336/Wallpaper-Images)), create:
-
-```
-wallpapers/
-├── manifest.json
-├── nature/
-│   ├── forest_01.jpg
-│   └── thumbs/
-│       └── forest_01.jpg
-├── abstract/
-│   └── ...
-└── ...
-```
-
-### 2. manifest.json format
-
-```json
-{
-  "version": 1,
-  "categories": ["nature", "abstract", "minimal", "urban"],
-  "wallpapers": [
-    {
-      "id": "nature_01",
-      "title": "Forest Dawn",
-      "category": "nature",
-      "tags": ["green", "forest", "morning"],
-      "url": "https://raw.githubusercontent.com/rishabh11336/Wallpaper-Images/main/wallpapers/nature/forest_01.jpg",
-      "thumb_url": "https://raw.githubusercontent.com/rishabh11336/Wallpaper-Images/main/wallpapers/nature/thumbs/forest_01.jpg",
-      "resolution": "4K",
-      "width": 3840,
-      "height": 2160
-    }
-  ]
-}
-```
-
-### 3. Update the manifest URL
-
-Open `lib/core/constants.dart` and change `manifestUrl` to point to your raw GitHub URL:
-
+### 3. Adding Your Own Wallpapers
+By default, the app looks at the `rishabh11336/Wallpaper-Images` GitHub repository. 
+If you want to host your own wallpapers:
+1. Open `lib/core/constants.dart`.
+2. Change the `manifestUrl` endpoint to point to your target repository's directory using the generic GitHub Contents API:
 ```dart
-static const String manifestUrl =
-    'https://raw.githubusercontent.com/rishabh11336/Wallpaper-Images/main/wallpapers/manifest.json';
+static const String manifestUrl = 'https://api.github.com/repos/<Your-User>/<Your-Repo>/contents/';
 ```
+3. Upload images directly into that GitHub repository path. WallCraft automatically processes, filters, labels, and displays them right in the app in real time!
 
----
-
-## Project Structure
-
-```
-lib/
-├── main.dart                          Entry point
-├── app/
-│   ├── app.dart                       MaterialApp + theme
-│   └── router.dart                    GoRouter routes
-├── core/
-│   ├── constants.dart                 URLs, timeouts
-│   └── theme/
-│       ├── app_theme.dart             Light & dark themes
-│       └── app_colors.dart            Color tokens
-├── data/
-│   ├── models/
-│   │   ├── wallpaper.dart             Freezed model
-│   │   ├── wallpaper.freezed.dart     Generated
-│   │   └── wallpaper.g.dart           Generated
-│   ├── repositories/
-│   │   └── wallpaper_repository.dart
-│   └── sources/
-│       └── github_source.dart         Fetches manifest.json
-├── features/
-│   ├── home/
-│   │   ├── home_screen.dart           Tab bar + grid
-│   │   ├── home_provider.dart         Riverpod providers
-│   │   └── widgets/
-│   │       ├── category_tab_bar.dart
-│   │       ├── wallpaper_grid.dart
-│   │       ├── wallpaper_card.dart    Card with shimmer
-│   │       └── shimmer_grid.dart      Loading skeleton
-│   └── preview/
-│       ├── preview_screen.dart        Full-screen preview
-│       └── widgets/
-│           └── preview_actions_sheet.dart
-└── shared/
-    ├── widgets/
-    │   └── error_view.dart            Error & retry UI
-    └── extensions/
-        └── context_extensions.dart
-```
-
----
-
-## Phase Roadmap
-
-| Phase | Features |
-| ----- | -------- |
-| **1 ✅** | Project scaffolding, GitHub data source, home screen, preview screen, shimmer loading, navigation |
-| **2** | Actual wallpaper setting (home/lock/both), bottom navigation, download to device |
-| **3** | Search & filter, favourites system, advanced categories |
-
----
-
-## Code Generation
-
-After modifying any `@freezed` model or adding new ones, regenerate with:
-
+## 📱 Build The Application
+### Android (12+)
 ```bash
-flutter pub run build_runner build --delete-conflicting-outputs
+flutter build apk --release
 ```
-
-For continuous watch during development:
-
+### iOS
 ```bash
-flutter pub run build_runner watch --delete-conflicting-outputs
+flutter build ipa --release
 ```
 
----
-
-## License
-
-MIT
+## ⚖️ License
+This project is completely open source and available for testing, cloning, or modifying securely!
